@@ -71,11 +71,6 @@ namespace SpyCamera.ViewModel
 
             set
             {
-                if (frames == value)
-                {
-                    return;
-                }
-
                 RaisePropertyChanging(FramesPropertyName);
                 frames = value;
                 RaisePropertyChanged(FramesPropertyName);
@@ -135,16 +130,16 @@ namespace SpyCamera.ViewModel
 
             cameraSettings = camera.Camera.CameraSettings;
 
-            SaveDirectory = cameraSettings.Directory;
-            Frames = cameraSettings.Frames;
-            MaxMbSize = cameraSettings.MaxSizeMb;
-
             FramesList.Clear();
 
             foreach (int fps in cameraService.GetFramesPerSecondList(camera.Camera))
             {
                 FramesList.Add(fps);
             }
+
+            SaveDirectory = cameraSettings.Directory;
+            Frames = cameraSettings.Frames;
+            MaxMbSize = cameraSettings.MaxSizeMb;
         }
 
         #region SaveCommand

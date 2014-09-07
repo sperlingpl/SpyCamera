@@ -54,7 +54,7 @@
                             </Grid.ColumnDefinitions>
                             
                             <StackPanel Grid.Column="0">
-                                <Button Content="..." Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Window}}, Path=DataContext.CameraConfigCommand}"></Button>
+                                <Button x:Name="CameraSettingsButton" Content="..." Click="CameraSettingsButton"></Button>
                             </StackPanel>
                             
                             <StackPanel Grid.Column="1">

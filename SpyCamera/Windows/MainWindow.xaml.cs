@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using GalaSoft.MvvmLight.Messaging;
 using SpyCamera.Enums.Window;
 using SpyCamera.ViewModel;
@@ -14,13 +15,12 @@ namespace SpyCamera.Windows
         public MainWindow()
         {
             InitializeComponent();
-
-            Messenger.Default.Register<CameraViewModel>(this, WindowToken.OpenCameraRecordingSettings, OnOpenCameraRecordingSettings);
         }
 
         private void OnOpenCameraRecordingSettings(CameraViewModel obj)
         {
             var cameraConfigWindow = new CameraRecordingSettings();
+            Messenger.Default.Send(obj, WindowToken.OpenCameraRecordingSettings);
             cameraConfigWindow.Owner = this;
             cameraConfigWindow.ShowDialog();
         }
@@ -30,6 +30,15 @@ namespace SpyCamera.Windows
             var newCameraWindow = new NewCameraWindow();
             newCameraWindow.Owner = this;
             newCameraWindow.ShowDialog();
+        }
+
+        private void CameraSettingsButton(object sender, RoutedEventArgs e)
+        {
+            Button btn = (Button) sender;
+            if (btn.DataContext is CameraViewModel)
+            {
+                OnOpenCameraRecordingSettings((CameraViewModel)btn.DataContext);
+            }
         }
     }
 }
