@@ -68,6 +68,7 @@ namespace SpyCamera.Services.CameraService
 
             cameraPlugin = cameraDevice.CameraPlugin;
             
+            cameraPlugin.SetFramerate(camera.CameraSettings.Frames);
             cameraPlugin.StartVideoCapture(camera.CameraConnection);
             StartRecordingVideo(camera); // temp
         }

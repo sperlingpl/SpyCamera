@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using System.Windows.Media.Imaging;
 using AForge.Video;
@@ -37,6 +40,8 @@ namespace L610Plugin
             StopVideoCapture();
 
             OnStatusChanged(this, CameraStatus.Loading);
+
+            SendFpsSettingRequest(cameraConnection);
 
             videoSource = new MJPEGStream(CreateAddressToCameraCapture(cameraConnection));
             videoSource.NewFrame += videoSource_NewFrame;
@@ -93,9 +98,27 @@ namespace L610Plugin
             this.fps = fps;
         }
 
+        private void SendFpsSettingRequest(CameraConnection cameraConnection)
+        {
+            string address;
+
+            if (cameraConnection.Address.EndsWith("/"))
+                address = cameraConnection.Address;
+            else
+                address = cameraConnection.Address + "/";
+
+            var wc = new WebClient();
+            wc.DownloadString(string.Format("{0}camera_control.cgi?loginuse={1}&loginpas={2}&param={3}&value={4}", address, cameraConnection.Login, cameraConnection.Password, 6, fps));
+        }
+
         public List<int> GetAllowedFramerateList()
         {
-            return new List<int>() {5, 25, 30};
+            var fpsList = new List<int>();
+            
+            for(int i = 1 ; i < 31;i++)
+                fpsList.Add(i);
+
+            return fpsList;
         }
 
         public int GetFramerate()
